@@ -34,6 +34,7 @@ int main()
     checkValue(a);
     cout << "Surface area of a ball = " << ballSurface(a) << endl;
     cout << "Volume of a ball = " << ballVolume(a) << endl;
+    return 0;
 }
 double getValue()
 {
@@ -55,7 +56,7 @@ void checkValue(double value)
 }
 double ballSurface(double a)
 {
-    return 4*3.14*pow(a,2);
+    return 4 * 3.14 * pow(a, 2);
 }
 double ballVolume(double a)
 {
