@@ -10,7 +10,7 @@ double getValue();
 * @param a - Число
 * @return Возвращает результат
 */
-double checkCondition(double a);
+double checkCondition(const double a);
 /**
 * @breef - главная функция программы
 * @return - возвращает 0, если функция выполнена верно, иначе 1
@@ -30,7 +30,7 @@ int main() {
     return 0;
 }
 
-double checkCondition(double a) {
+double checkCondition(const double a) {
     if (a >= 0)
     {
         return pow(a, 2);
