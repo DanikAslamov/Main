@@ -1,5 +1,7 @@
 ﻿#include <iostream>
+#include <cmath>
 #include <stdlib.h>
+#define _USE_MATH_DEFINES
 using namespace std;
 /**
 * @breef Считывает значение с клавиатуры с проверкой ввода
@@ -56,9 +58,9 @@ void checkValue(const double value)
 }
 double ballSurface(const double a)
 {
-    return 4 * 3.14 * pow(a, 2);
+    return 4 * M_PI * pow(a, 2);
 }
 double ballVolume(const double a)
 {
-    return (4 / 3) * 3.14 * pow(a, 3);
+    return (4 / 3) * M_PI * pow(a, 3);
 }
