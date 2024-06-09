@@ -1,69 +1,22 @@
 #include <iostream>
-
-#include <random>
-
 using namespace std;
 
 /**
-* @brief Заполняет массив случаными числами
-* @param arr указатель на массив
-* @param n количество строк
-* @param m количество столбцов
+* @brief Заполнение матрицы автоматически
+* @param matrix указатель на массив
+* @param rows строки
+* @param columns столбцым
 */
-void randFill(int** arr, const int n, const int m);
+void ranom(int** matrix, const int rows, const int columns);
 
 /**
-* @brief Заполняет массив вручную через stdin
-* @param arr указатель на массив
-* @param n количество строк
-* @param m количество столбцов
+* @brief Копирует массив
+* @param matrix указатель на массив
+* @param rows строки
+* @param columns столбцым
+* @return возвращает указатель на скопированный массив
 */
-void manualFill(int** arr, const int n, const int m);
-
-/**
-* @brief Заменяет все элементы первых трех столбцов на их квадраты
-* @param arr указатель на массив
-* @param n количество строк
-* @param m количество столбцов
-*/
-void replaceThreeColumns(int** arr, const int n, const int m);
-
-/**
-* @brief Вставляет после каждой нечетной строки первую строку
-* @param arr указатель на массив
-* @param n количество строк
-* @param m количество столбцов
-*/
-int** insertFirstRow(int** arr, const int n, const int m);
-
-/**
-* @brief Выводит матрицу в stdout
-* @param arr указатель на массив
-* @param n количество строк
-* @param m количество столбцов
-*/
-void printMatrix(int** arr, const int n, const int m);
-
-/**
-* @brief Выделяет память под массив
-* @param arr указатель на массив
-* @param n количество строк
-* @param m количество столбцов
-*/
-void alloc(int*** arr, const int n, const int m);
-
-/**
-* @brief Очищает выделенную память под массив
-* @param arr указатель на массив
-* @param n количество строк
-*/
-void dealloc(int** arr, const int n);
-
-/**
-* @brief Считывает число типа int из stdin с проверкой
-* @return возвращает считанный объект
-*/
-int getValue();
+int** copyArray(int **matrix, const int rows, const int columns);
 
 /**
 * @brief Проверка на неотрицательное число
@@ -72,290 +25,225 @@ int getValue();
 void checkPositive(const int value);
 
 /**
-* @brief Копирует массив из шаблона
-* @param arr указатель на массив - шаблон
-* @param n количество строк
-* @param m количество столбцов
-* @return возвращает указатель на скопированный массив
+* @brief Подсчет количества слобцов для нвоой матрицы для задания 2
+* @param orig_matrix указатель на массив
+* @param rows строки
+* @param columns столбцы
+* @return size_t количетсво столбцов
 */
-int** copyArray(int** arr, const int n, const int m);
+size_t GetNewColums(int** orig_matrix, const int rows, const int columns);
+
+/**
+* @brief Заполнение матрицы вручную
+* @param matrix указатель на массив
+* @param rows строки
+* @param columns столбцым
+*/
+void manual(int** matrix, const int rows, const int columns);
+
+/**
+* @brief Заменить минимальный по модулю элемент каждого столбца нулем
+* @param matrix указатель на массив
+* @param rows строки
+* @param columns столбцым
+*/
+void operation1(int** matrix, const int rows, const int columnsm);
+
+/**
+* @brief Удалить все столбцы, в которых первый элемент больше последнего
+* @param t_matrix указатель на массив исходный
+* @param m_matrix указатель на массив с удаленнми столбцами
+* @param rows строки исходного
+* @param columns столбцы исходного
+*/
+void operation2(int** t_matrix, int** m_matrix, const int rows, const int columns);
+
+/**
+* @brief Выводит матрицу в stdout
+* @param matrix указатель на массив
+* @param rows строки
+* @param columns столбцы
+*/
+void print(int** matrix, const int rows, const int columns);
+
+/**
+* @brief Выделяет память
+* @param rows строки
+* @param columns столбцы
+* @return возвращает ссылку на выделенную память
+*/
+int** GetNewMatrix(const int rows, const int columns);
+
+/**
+* @brief Очищает выделенную память
+* @param matix указатель на массив
+* @param rows строки
+*/
+void FreeMatrix(int **matrix, const int rows);
+
+/**
+* @brief Считывает число типа int из stdin с проверкой
+* @return возвращает считанный объект
+*/
+int getValue();
 
 /**
 * @brief точка входа в программу
-* @return 0 (или 1 при ошибке)
+* @return 0 (1)
 */
-int main() 
-{
+int main() {
     cout << "Введите количество строк" << endl;
-
-    int n = getValue();
-
-    checkPositive(n);
-
+    int rows= getValue();
+    checkPositive(rows);
     cout << "Введите количество столбцов" << endl;
-
-    int m = getValue();
-
-    checkPositive(m);
-
+    int columns = getValue();
+    checkPositive(columns);
     cout << "Введите режим ввода(1 - ручной, 0 - случайные числа от -100 до 100): " << endl;
-
-    int mode = getValue();
-
-
-    int** arr = nullptr;
-
-    alloc(&arr, n, m);
-
-
-    switch (mode) 
-    {
-
-    case 0:
-
-        randFill(arr, n, m);
-
-        break;
-
-    case 1:
-
-        manualFill(arr, n, m);
-
-        break;
-
-    default:
-
-        cout << "Некорректный режим заполнения!" << endl;
-
-        return 1;
-
+    int type = getValue();
+    int **matrix_orig = GetNewMatrix(rows, columns);
+    switch (type) {
+        case 0 : 
+            ranom(matrix_orig, rows, columns);
+            break;
+        case 1 :
+            manual(matrix_orig, rows, columns);
+            break;
+        default :
+            cout << "Некорректное заполнениe" << endl;
+            return 1;
+    }
+    cout << "Массив: " << endl;
+    print(matrix_orig, rows, columns);
+    
+    cout << "Задание - Заменить минимальный по модулю элемент каждого столбца нулем." << endl;
+    int **matrix1 = copyArray(matrix_orig, rows, columns);
+    operation1(matrix1, rows, columns);
+    print(matrix1, rows, columns);
+    FreeMatrix(matrix1, rows);
+    
+    cout << "Задание - Удалить все столбцы, в которых первый элемент больше последнего." << endl;
+    size_t new_colums = GetNewColums(matrix_orig, rows, columns);
+    if (new_colums == 0) {
+        cout << "будут удалены все столбцы!" << endl;
+    } else {
+        int **matrix2 = GetNewMatrix(rows, new_colums);
+        operation2(matrix_orig, matrix2, rows, columns);
+        print(matrix2, rows, new_colums);
+        FreeMatrix(matrix2, rows);
     }
 
-
-    cout << "Массив заполнен: " << endl;
-
-    printMatrix(arr, n, m);
-
-
-    int** first_task_arr = copyArray(arr, n, m);
-
-    replaceThreeColumns(first_task_arr, n, m);
-
-    cout << "1) Заменить все элементы первых трех столбцов на их квадраты." << endl;
-
-    printMatrix(first_task_arr, n, m);
-
-    dealloc(first_task_arr, n);
-
-
-    int** second_task_arr = insertFirstRow(arr, n, m);
-
-    cout << "2) Вставить после каждой нечетной строки первую строку." << endl;
-
-    printMatrix(second_task_arr, n + (n / 2), m);
-
-    dealloc(second_task_arr, n + (n / 2));
-
-
-    dealloc(arr, n);
-
-
+    FreeMatrix(matrix_orig, rows);
     return 0;
-
 }
 
-
-void randFill(int** arr, const int n, const int m) {
-
-    random_device rd;
-
-    mt19937 gen(rd());
-
-    uniform_int_distribution<> distribution(-100, 100);
-
-
-    for (size_t i = 0; i < n; ++i) {
-
-        for (size_t j = 0; j < m; ++j) {
-
-            arr[i][j] = distribution(gen);
-
+size_t GetNewColums(int** orig_matrix, const int rows, const int columns) {
+    size_t res = 0;
+    for (size_t i = 0; i < (size_t)columns; i++) {
+        if (orig_matrix[0][i] <= orig_matrix[rows - 1][i]) {
+            res++;
         }
-
     }
-
+    return res;
 }
 
-
-void manualFill(int** arr, const int n, const int m) {
-
-    for (size_t i = 0; i < n; ++i) {
-
-        for (size_t j = 0; j < m; ++j) {
-
-            cout << " [" << i << "][" << j << "]=";
-
-            cin >> arr[i][j];
-
+void ranom(int** matrix, const int rows, const int columns) {
+    for (size_t i = 0; i < (size_t)rows; i++) {
+        for (size_t j = 0; j < (size_t)columns; j++) {
+            matrix[i][j] =  rand() % (100 - -100 + 1) + -100;
         }
-
     }
-
 }
 
-
-void replaceThreeColumns(int** arr, const int n, const int m) {
-
-    for (size_t i = 0; i < n; ++i) {
-
-        for (size_t j = 0; j < min(3, m); ++j) {
-
-            arr[i][j] *= arr[i][j];
-
+void manual(int** matrix, const int rows, const int columns) {
+    for (size_t i = 0; i < (size_t)rows; i++) {
+        for (size_t j = 0; j < (size_t)columns; j++) {
+            cout << "ячейка с индексами -> [" << i << "][" << j << "]=";
+            cin >> matrix[i][j];
         }
-
     }
-
 }
 
-
-int** insertFirstRow(int** arr, const int n, const int m) {
-
-    int** newArr = nullptr;
-
-    alloc(&newArr, n + (n / 2), m);
-
-
-    int rowIndex = 0;
-
-
-    for (size_t i = 0; i < n; ++i) {
-
-        for (size_t j = 0; j < m; ++j) {
-
-            newArr[rowIndex][j] = arr[i][j];
-
-        }
-
-        ++rowIndex;
-
-
-
-        if (i % 2 == 1) {
-
-            for (size_t j = 0; j < m; ++j) {
-
-                newArr[rowIndex][j] = arr[0][j];
-
+void operation1(int** matrix, const int rows, const int columns) {
+    int min = INT32_MAX;
+    int* min_i_j[columns] = { nullptr };
+    for (size_t j= 0; j < (size_t)columns; j++) {
+        int* pmin = &min;
+        for (size_t i = 0; i < (size_t)rows; i++) {
+            if (abs(matrix[i][j]) < abs(*pmin)) {
+                pmin = &matrix[i][j];
             }
-
-            ++rowIndex;
-
         }
-
+        min_i_j[j] = pmin;
     }
 
-
-    return newArr;
-
+    for (size_t i = 0; i < (size_t)columns; i++) {
+        *(min_i_j[i]) = 0;
+    }
 }
 
-
-void printMatrix(int** arr, const int n, const int m) {
-
-    cout << "-------------------" << endl;
-
-    for (size_t i = 0; i < n; ++i) {
-
-        for (size_t j = 0; j < m; ++j) {
-
-            cout << arr[i][j] << " ";
-
+void operation2(int** t_matrix, int** m_matrix, const int rows, const int columns) {
+    size_t m_cols = 0;
+    for (size_t j = 0; j < (size_t)columns; ++j) {
+        if (t_matrix[0][j] <= t_matrix[rows-1][j]) {
+            for (size_t i = 0; i < (size_t)rows; ++i) {
+                m_matrix[i][m_cols] = t_matrix[i][j];
+            }
+            m_cols++;
         }
-
-        cout << endl;
-
     }
-
-    cout << "-------------------" << endl;
-
 }
-
-
-void alloc(int*** arr, const int n, const int m) {
-
-    *arr = new int* [n];
-
-    for (size_t i = 0; i < n; ++i) {
-
-        (*arr)[i] = new int[m];
-
-    }
-
-}
-
-
-void dealloc(int** arr, const int n) {
-
-    for (size_t i = 0; i < n; ++i) {
-
-        delete[] arr[i];
-
-    }
-
-    delete[] arr;
-
-}
-
 
 int getValue() {
-
     int value;
-
     cin >> value;
-
     if (cin.fail()) {
-
         cout << "Некорректное значение" << endl;
-
         abort();
-
     }
-
     return value;
-
 }
 
-
-void checkPositive(const int value) {
-
-    if (value <= 0) {
-
-        cout << "Error: число должно быть положительным" << endl;
-
+void checkPositive(const int value) {     
+    if (value <= 0) {     
+        cout<<"Error"<<endl;
         abort();
-
-    }
-
+    }     
 }
 
-
-int** copyArray(int** arr, const int n, const int m) {
-
-    int** resultArray = nullptr;
-
-    alloc(&resultArray, n, m);
-
-    for (size_t i = 0; i < n; i++) {
-
-        for (size_t j = 0; j < m; j++) {
-
-            resultArray[i][j] = arr[i][j];
-
-        }
-
+int** GetNewMatrix(const int rows, const int columns) {
+    int** matrix = new int*[rows];
+    for (size_t i = 0; i < (size_t)rows; ++i) {
+        matrix[i] = new int[columns];
     }
+    return matrix;
+}
 
+void FreeMatrix(int **matrix, const int rows) {
+    for (size_t i = 0; i < (size_t)rows; ++i) {
+        delete[] matrix[i];
+    }
+    delete[] matrix;
+}
+
+int** copyArray(int **matrix, const int rows, const int columns) {
+    int** resultArray = GetNewMatrix(rows, columns);
+    for (size_t i = 0; i < (size_t)rows; i++)
+    {     
+        for (size_t j = 0; j < (size_t)columns; j++)
+        {     
+            resultArray[i][j] = matrix[i][j];
+        }     
+    }
     return resultArray;
+}
 
+void print(int** matrix, const int rows, const int columns) {
+    cout<< endl;
+    for (size_t i = 0; i < (size_t)rows; ++i) {
+        for (size_t j = 0; j < (size_t)columns; ++j) {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
 }
