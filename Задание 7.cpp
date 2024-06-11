@@ -164,20 +164,19 @@ void manual(int** matrix, const int rows, const int columns) {
 }
 
 void operation1(int** matrix, const int rows, const int columns) {
-    int min = INT32_MAX;
     int* min_i_j[columns] = { nullptr };
-    for (size_t j= 0; j < (size_t)columns; j++) {
-        int* pmin = &min;
+    for (size_t j = 0; j < (size_t)columns; j++) {
+        int min = INT32_MAX;
         for (size_t i = 0; i < (size_t)rows; i++) {
-            if (abs(matrix[i][j]) < abs(*pmin)) {
-                pmin = &matrix[i][j];
+            if (abs(matrix[i][j]) < abs(min)) {
+                min = matrix[i][j];
+                min_i_j[j] = &matrix[i][j];
             }
         }
-        min_i_j[j] = pmin;
     }
 
     for (size_t i = 0; i < (size_t)columns; i++) {
-        *(min_i_j[i]) = 0;
+        *min_i_j[i] = 0;
     }
 }
 
