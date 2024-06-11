@@ -25,6 +25,14 @@ void printTabFunction(const double minValue, const double maxValue, const double
 * @param step - значение шага функции
 */
 void checkStep(const double step);
+
+/**
+ * @brief Проверяет является ли число ООФ (однородной особым функционалом) относительно функции f(x) = x + x^(1/2) + x^(1/3) - 2.5.
+ * @param number Проверяемое число.
+ * @return true, если число является ООФ, иначе false.
+ */
+bool isSpecialNumber(const double number);
+
 /**
 * @breef - главная функция программы
 * @return - возвращает 0, если функция выполнена верно, иначе 1.
@@ -74,5 +82,20 @@ void checkStep(const double step)
     {
         cout << "Incorrect step!!!" << endl;
         abort();
+    }
+}
+
+bool isSpecialNumber(const double number)
+{
+    double result = number + pow(number, 1.0 / 2) + pow(number, 1.0 / 3) - 2.5;
+
+    // Проверка на ООФ
+    if (result == number)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
