@@ -68,12 +68,17 @@ void checkRange(const double min, const double max)
         abort();
     }
 }
-void printTabFunction(const double minValue, const double maxValue, const double step)
+void printTabFunction(double minValue, double maxValue, double step)
 {
     cout << setw(10) << "x" << setw(10) << "y" << endl;
     for (double i = minValue; i < maxValue + step; i = i + step) {
-        double a = i + pow(i, 1 / 2) + pow(i, 1 / 3) - 2.5;
-        cout << setw(10) << i << setw(10) << a << endl;
+        if (i >= 0) {
+            double a = i + pow(i, 1 / 2) + pow(i, 1 / 3) - 2.5;
+            cout << setw(10) << i << setw(10) << a << endl;
+        }
+        else {
+            cout << "Function is undefined for x = " << i << endl;
+        }
     }
 }
 void checkStep(const double step)
