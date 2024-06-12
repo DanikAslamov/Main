@@ -64,7 +64,7 @@ void printTabFunction(double minValue, double maxValue, double step)
 {
     cout << setw(10) << "x" << setw(10) << "y" << endl;
     for (double i = minValue; i < maxValue + step; i = i + step) {
-        if (i >= 0) {
+        if (i >= numeric_limits<double>::epsilon()) {
             double a = i + pow(i, 1 / 2) + pow(i, 1 / 3) - 2.5;
             cout << setw(10) << i << setw(10) << a << endl;
         }
