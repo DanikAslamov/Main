@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 using namespace std;
 
@@ -16,7 +18,7 @@ void ranom(int** matrix, const int rows, const int columns);
 * @param columns столбцым
 * @return возвращает указатель на скопированный массив
 */
-int** copyArray(int **matrix, const int rows, const int columns);
+int** copyArray(int** matrix, const int rows, const int columns);
 
 /**
 * @brief Проверка на неотрицательное число
@@ -25,13 +27,13 @@ int** copyArray(int **matrix, const int rows, const int columns);
 void checkPositive(const int value);
 
 /**
-* @brief Подсчет количества слобцов для нвоой матрицы для задания 2
+* @brief Подсчет количества столбцов для новой матрицы для задания 2
 * @param orig_matrix указатель на массив
 * @param rows строки
 * @param columns столбцы
-* @return size_t количетсво столбцов
+* @return size_t количество столбцов
 */
-size_t GetNewColums(int** orig_matrix, const int rows, const int columns);
+size_t GetNewColumns(int** orig_matrix, const int rows, const int columns);
 
 /**
 * @brief Заполнение матрицы вручную
@@ -47,16 +49,17 @@ void manual(int** matrix, const int rows, const int columns);
 * @param rows строки
 * @param columns столбцым
 */
-void operation1(int** matrix, const int rows, const int columnsm);
+void operation1(int** matrix, const int rows, const int columns);
+
 
 /**
-* @brief Удалить все столбцы, в которых первый элемент больше последнего
-* @param t_matrix указатель на массив исходный
-* @param m_matrix указатель на массив с удаленнми столбцами
+* @brief Вставить после каждой нечетной строки первую строку
+* @param orig_matrix указатель на массив исходный
+* @param m_matrix указатель на массив с вставленными строками
 * @param rows строки исходного
 * @param columns столбцы исходного
 */
-void operation2(int** t_matrix, int** m_matrix, const int rows, const int columns);
+void operation2(int** orig_matrix, int** m_matrix, const int rows, const int columns);
 
 /**
 * @brief Выводит матрицу в stdout
@@ -79,7 +82,7 @@ int** GetNewMatrix(const int rows, const int columns);
 * @param matix указатель на массив
 * @param rows строки
 */
-void FreeMatrix(int **matrix, const int rows);
+void FreeMatrix(int** matrix, const int rows);
 
 /**
 * @brief Считывает число типа int из stdin с проверкой
@@ -92,54 +95,51 @@ int getValue();
 * @return 0 (1)
 */
 int main() {
+    setlocale(LC_ALL, "Russian");
     cout << "Введите количество строк" << endl;
-    int rows= getValue();
+    int rows = getValue();
     checkPositive(rows);
     cout << "Введите количество столбцов" << endl;
     int columns = getValue();
     checkPositive(columns);
-    cout << "Введите режим ввода(1 - ручной, 0 - случайные числа от -100 до 100): " << endl;
+    cout << "Введите режим ввода(1 - ручной, 0 - случайные числа ): " << endl;
     int type = getValue();
-    int **matrix_orig = GetNewMatrix(rows, columns);
+    int** matrix_orig = GetNewMatrix(rows, columns);
     switch (type) {
-        case 0 : 
-            ranom(matrix_orig, rows, columns);
-            break;
-        case 1 :
-            manual(matrix_orig, rows, columns);
-            break;
-        default :
-            cout << "Некорректное заполнениe" << endl;
-            return 1;
+    case 0:
+        ranom(matrix_orig, rows, columns);
+        break;
+    case 1:
+        manual(matrix_orig, rows, columns);
+        break;
+    default:
+        cout << "Некорректное заполнение" << endl;
+        return 1;
     }
     cout << "Массив: " << endl;
     print(matrix_orig, rows, columns);
-    
+
     cout << "Задание - Заменить минимальный по модулю элемент каждого столбца нулем." << endl;
-    int **matrix1 = copyArray(matrix_orig, rows, columns);
+    int** matrix1 = copyArray(matrix_orig, rows, columns);
     operation1(matrix1, rows, columns);
     print(matrix1, rows, columns);
     FreeMatrix(matrix1, rows);
-    
-    cout << "Задание - Удалить все столбцы, в которых первый элемент больше последнего." << endl;
-    size_t new_colums = GetNewColums(matrix_orig, rows, columns);
-    if (new_colums == 0) {
-        cout << "будут удалены все столбцы!" << endl;
-    } else {
-        int **matrix2 = GetNewMatrix(rows, new_colums);
-        operation2(matrix_orig, matrix2, rows, columns);
-        print(matrix2, rows, new_colums);
-        FreeMatrix(matrix2, rows);
-    }
+
+
+    cout << "Вставить после каждой нечетной строки первую строку." << endl;
+    int** matrix2 = GetNewMatrix(rows * 2, columns); // Создаем новую матрицу с удвоенным количеством строк
+    operation2(matrix_orig, matrix2, rows, columns);
+    print(matrix2, rows * 2, columns);
+    FreeMatrix(matrix2, rows * 2);
 
     FreeMatrix(matrix_orig, rows);
     return 0;
 }
 
-size_t GetNewColums(int** orig_matrix, const int rows, const int columns) {
+size_t GetNewColumns(int** orig_matrix, const int rows, const int columns) {
     size_t res = 0;
-    for (size_t i = 0; i < (size_t)columns; i++) {
-        if (orig_matrix[0][i] <= orig_matrix[rows - 1][i]) {
+    for (size_t j = 0; j < (size_t)columns; j++) {
+        if (orig_matrix[0][j] <= orig_matrix[rows - 1][j]) {
             res++;
         }
     }
@@ -149,7 +149,7 @@ size_t GetNewColums(int** orig_matrix, const int rows, const int columns) {
 void ranom(int** matrix, const int rows, const int columns) {
     for (size_t i = 0; i < (size_t)rows; i++) {
         for (size_t j = 0; j < (size_t)columns; j++) {
-            matrix[i][j] =  rand() % (100 - -100 + 1) + -100;
+            matrix[i][j] = rand() % (100 - -100 + 1) + -100;
         }
     }
 }
@@ -162,31 +162,30 @@ void manual(int** matrix, const int rows, const int columns) {
         }
     }
 }
-void operation1(int** matrix, const int rows, const int columns) 
-{
-    int* min_i_j[columns] = { nullptr };
-    for (size_t j = 0; j < (size_t)columns; j++) 
-    {
-        int min = matrix[0][j]; // Инициализируем min первым элементом каждой колонки
-        for (size_t i = 0; i < (size_t)rows; i++) 
-        {
-            if (matrix[i][j] < min) 
-            {
-                min = matrix[i][j];
-                min_i_j[j] = &matrix[i][j];
+
+void operation1(int** matrix, const int rows, const int columns) {
+    for (size_t j = 0; j < (size_t)columns; j++) {
+        int min = abs(matrix[0][j]); // Инициализируем min абсолютным значением первого элемента каждой колонки
+        size_t min_i = 0; // Индекс строки с минимальным элементом
+        for (size_t i = 0; i < (size_t)rows; i++) {
+            if (abs(matrix[i][j]) < min) {
+                min = abs(matrix[i][j]);
+                min_i = i;
             }
         }
+        matrix[min_i][j] = 0; // Заменяем минимальный элемент нулем
     }
 }
 
-void operation2(int** t_matrix, int** m_matrix, const int rows, const int columns) {
-    size_t m_cols = 0;
-    for (size_t j = 0; j < (size_t)columns; ++j) {
-        if (t_matrix[0][j] <= t_matrix[rows-1][j]) {
-            for (size_t i = 0; i < (size_t)rows; ++i) {
-                m_matrix[i][m_cols] = t_matrix[i][j];
+void operation2(int** orig_matrix, int** m_matrix, const int rows, const int columns) {
+    for (size_t i = 0; i < (size_t)rows; ++i) {
+        for (size_t j = 0; j < (size_t)columns; ++j) {
+            m_matrix[i * 2][j] = orig_matrix[i][j]; // Копируем исходную строку
+            if (i % 2 == 1) { // Если строка нечетная
+                for (size_t k = 0; k < (size_t)columns; ++k) {
+                    m_matrix[i * 2 + 1][k] = orig_matrix[0][k]; // Вставляем первую строку после нечетной строки
+                }
             }
-            m_cols++;
         }
     }
 }
@@ -201,42 +200,42 @@ int getValue() {
     return value;
 }
 
-void checkPositive(const int value) {     
-    if (value <= 0) {     
-        cout<<"Error"<<endl;
+void checkPositive(const int value) {
+    if (value <= 0) {
+        cout << "Error" << endl;
         abort();
-    }     
+    }
 }
 
 int** GetNewMatrix(const int rows, const int columns) {
-    int** matrix = new int*[rows];
+    int** matrix = new int* [rows];
     for (size_t i = 0; i < (size_t)rows; ++i) {
         matrix[i] = new int[columns];
     }
     return matrix;
 }
 
-void FreeMatrix(int **matrix, const int rows) {
+void FreeMatrix(int** matrix, const int rows) {
     for (size_t i = 0; i < (size_t)rows; ++i) {
         delete[] matrix[i];
     }
     delete[] matrix;
 }
 
-int** copyArray(int **matrix, const int rows, const int columns) {
+int** copyArray(int** matrix, const int rows, const int columns) {
     int** resultArray = GetNewMatrix(rows, columns);
     for (size_t i = 0; i < (size_t)rows; i++)
-    {     
+    {
         for (size_t j = 0; j < (size_t)columns; j++)
-        {     
+        {
             resultArray[i][j] = matrix[i][j];
-        }     
+        }
     }
     return resultArray;
 }
 
 void print(int** matrix, const int rows, const int columns) {
-    cout<< endl;
+    cout << endl;
     for (size_t i = 0; i < (size_t)rows; ++i) {
         for (size_t j = 0; j < (size_t)columns; ++j) {
             cout << matrix[i][j] << " ";
@@ -245,3 +244,4 @@ void print(int** matrix, const int rows, const int columns) {
     }
     cout << endl;
 }
+
