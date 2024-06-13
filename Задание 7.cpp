@@ -44,13 +44,12 @@ size_t GetNewColumns(int** orig_matrix, const int rows, const int columns);
 void manual(int** matrix, const int rows, const int columns);
 
 /**
-* @brief Заменить минимальный по модулю элемент каждого столбца нулем
+* @brief Заменить все элементы первых трех столбцов на их квадраты
 * @param matrix указатель на массив
 * @param rows строки
-* @param columns столбцым
+* @param columns столбцы
 */
 void operation1(int** matrix, const int rows, const int columns);
-
 
 /**
 * @brief Вставить после каждой нечетной строки первую строку
@@ -162,30 +161,26 @@ void manual(int** matrix, const int rows, const int columns) {
         }
     }
 }
-
 void operation1(int** matrix, const int rows, const int columns) {
-    for (size_t j = 0; j < (size_t)columns; j++) {
-        int min = abs(matrix[0][j]); // Инициализируем min абсолютным значением первого элемента каждой колонки
-        size_t min_i = 0; // Индекс строки с минимальным элементом
-        for (size_t i = 0; i < (size_t)rows; i++) {
-            if (abs(matrix[i][j]) < min) {
-                min = abs(matrix[i][j]);
-                min_i = i;
-            }
+    for (size_t i = 0; i < (size_t)rows; i++) {
+        for (size_t j = 0; j < 3; j++) { // Обработка первых трех столбцов
+            matrix[i][j] = matrix[i][j] * matrix[i][j]; // Замена на квадрат
         }
-        matrix[min_i][j] = 0; // Заменяем минимальный элемент нулем
     }
 }
 
 void operation2(int** orig_matrix, int** m_matrix, const int rows, const int columns) {
+    size_t new_row = 0;
     for (size_t i = 0; i < (size_t)rows; ++i) {
         for (size_t j = 0; j < (size_t)columns; ++j) {
-            m_matrix[i * 2][j] = orig_matrix[i][j]; // Копируем исходную строку
-            if (i % 2 == 1) { // Если строка нечетная
-                for (size_t k = 0; k < (size_t)columns; ++k) {
-                    m_matrix[i * 2 + 1][k] = orig_matrix[0][k]; // Вставляем первую строку после нечетной строки
-                }
+            m_matrix[new_row][j] = orig_matrix[i][j]; // Копируем исходную строку
+        }
+        new_row++;
+        if (i % 2 == 0) { // Если строка четная
+            for (size_t j = 0; j < (size_t)columns; ++j) {
+                m_matrix[new_row][j] = orig_matrix[0][j]; // Вставляем первую строку
             }
+            new_row++;
         }
     }
 }
