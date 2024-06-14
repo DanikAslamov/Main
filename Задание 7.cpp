@@ -203,8 +203,8 @@ void checkPositive(const int value) {
 }
 
 int** GetNewMatrix(const int rows, const int columns) {
-    int** matrix = new int* [rows];
-    for (size_t i = 0; i < (size_t)rows; ++i) {
+    int** matrix = new int*[rows * 2]; // Умножаем rows на 2 для удвоения количества строк
+    for (size_t i = 0; i < (size_t)(rows * 2); ++i) {
         matrix[i] = new int[columns];
     }
     return matrix;
